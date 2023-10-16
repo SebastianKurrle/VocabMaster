@@ -109,10 +109,46 @@ export const useUserStore = defineStore('user', () => {
             })
   }
 
+  /*
+    Logs the user out and delets the jwt token in the localstorage 
+  */
+  const userLogout = () => {
+    localStorage.removeItem('token')
+    user.value = {
+      id: '',
+      email: '',
+      name: '',
+      token: ''
+    }
+
+    authenticated.value = false
+
+    axios.defaults.headers.common['Authorization'] = ''
+
+    router.push({ name: 'sign-in' })
+  }
+
+  /*
+    This function is for views where the user needs to be logged in
+    otherwise he get pushed to the login page
+  */
+  const loginRequired = async ():Promise<boolean> => {
+    await checkToken(String(localStorage.getItem('token')))
+
+    if (!authenticated.value) {
+      router.push({name: 'sign-in'})
+      return false
+    }
+
+    return true
+  }
+
   return {
     checkToken,
     userSignUp,
     userSignIn,
+    userLogout,
+    loginRequired,
     user,
     authenticated,
     signUpErrors,
