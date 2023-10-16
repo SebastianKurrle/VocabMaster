@@ -1,0 +1,121 @@
+import { ref, reactive } from 'vue'
+import { defineStore } from 'pinia'
+import type { IUser } from '@/assets/Interfaces/IUser'
+import type { IUserSignUp } from '@/assets/Interfaces/IUserSignUp'
+import type { IUserSignIn } from '@/assets/Interfaces/IUserSignIn'
+import { toast } from 'vue3-toastify'
+import axios from 'axios'
+import router from '@/router'
+
+export const useUserStore = defineStore('user', () => {
+  const authenticated = ref(false)
+  const signUpErrors = reactive(Array())
+  const signInErrors = reactive(Array())
+
+  const user = ref<IUser>({
+    id: '',
+    email: '',
+    name: '',
+    token: ''
+  })
+
+  /*
+ This function checks if the token is valid
+ and sets the axios commen headers for authorization and updates the 
+ user varibale and the authenticated status
+ or deletes the token in the localstorage if the token is invalid
+*/
+  const checkToken = async (token: string) => {
+    if (token) {
+      await axios
+        .get('/api/user/check-token/', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+        .then(response => {
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+          localStorage.setItem('token', token)
+        })
+        .then(async () => {
+          await axios
+            .get('/api/user/user/')
+            .then(response => {
+              user.value.id = response.data.id
+              user.value.email = response.data.email
+              user.value.name = response.data.name
+              user.value.token = token
+
+              authenticated.value = true
+            })
+        })
+        .catch(error => {
+          toast.error('Authentication Error', { autoClose: 3000 })
+          localStorage.removeItem('token')
+        })
+    } else {
+      axios.defaults.headers.common['Authorization'] = ''
+    }
+  }
+
+  /*
+    Sends a signup request to the api to create a new user
+    If the server throws an error the error will be pushed in to the signUpErrors list
+  */
+  const userSignUp = async (signUpUser:IUserSignUp) => {
+    signUpErrors.length = 0
+
+    await axios
+          .post('/api/user/signup/', signUpUser)
+          .then(response => {
+              router.push({name: 'sign-in'})
+              toast.success('User Created', { autoClose: 3000 })
+          })
+          .catch(error => {
+            if (error.response) {
+              // Loops the server errors and push it in the errors array
+              for (const property in error.response.data.status) {
+                signUpErrors.push(
+                      `${property}: ${error.response.data.status[property]}`
+                  );
+              }
+            }
+          })
+  }
+
+  /*
+    Sends a signin request to the api to sign in with an existing user
+    If the server throws an error the error will be pushed in to the signInErrors list
+  */
+  const userSignIn = async (logInUser:IUserSignIn) => {
+    signInErrors.length = 0
+
+    await axios
+            .post('/api/user/login/', logInUser)
+            .then(response => {
+              user.value.token = response.data.access
+              checkToken(user.value.token)
+              router.push({'name': 'home'})
+            })
+            .catch(error => {
+              if (error.response) {
+                // Loops the server errors and push it in the errors array
+                for (const property in error.response.data) {
+                    signInErrors.push(
+                        `${property}: ${error.response.data[property]}`
+                    );
+                }
+              }
+            })
+  }
+
+  return {
+    checkToken,
+    userSignUp,
+    userSignIn,
+    user,
+    authenticated,
+    signUpErrors,
+    signInErrors
+  }
+})
