@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from .serializers import LanguagePracticeRoomSerializer
 from rest_framework.views import APIView
+from .models import LanguagePracticeRoom
 
 
 class LanguagePracticeRoomView(APIView):
@@ -14,4 +15,11 @@ class LanguagePracticeRoomView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=200)
+
+    def get(self, request):
+        practice_rooms = LanguagePracticeRoom.objects.filter(owner=request.user)
+
+        serializer = LanguagePracticeRoomSerializer(practice_rooms, many=True)
+
+        return Response(serializer.data)
 
