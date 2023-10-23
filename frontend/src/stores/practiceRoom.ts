@@ -39,6 +39,7 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
                 .post('/api/room/', practiceRoom)
                 .then(response => {
                     toast.success('Practice Room Created!', { autoClose: 3000 })
+                    getUserPracticeRooms()
                 })
                 .catch(error => {
                     if (error.response) {
