@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'user',
-    'language_practice_room'
+    'language_practice_room',
+    'vocabulary_set'
 ]
 
 MIDDLEWARE = [
