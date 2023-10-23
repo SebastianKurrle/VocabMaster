@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 import SignUpView from '../views/User/SignUpView.vue'
 import SignInView from '../views/User/SignInView.vue'
 import AccountView from '@/views/User/AccountView.vue'
+import PracticeRoomDetailView from '@/views/PracticeRoom/PracticeRoomDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: AccountView
+    },
+    {
+      path: '/room/:id',
+      name: 'room-detail',
+      component: PracticeRoomDetailView
     },
   ]
 })

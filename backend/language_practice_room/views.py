@@ -31,6 +31,13 @@ class LanguagePracticeRoomDetailView(APIView):
 
     permission_classes = [IsAuthenticated, IsPracticeRoomOwner]
 
+    def get(self, request, room_id):
+        room = get_object_or_404(LanguagePracticeRoom, id=room_id)
+        self.check_object_permissions(request, room)
+        serializer = LanguagePracticeRoomSerializer(room)
+
+        return Response(serializer.data)
+
     def delete(self, request, room_id):
         room = get_object_or_404(LanguagePracticeRoom, id=room_id)
         self.check_object_permissions(request, room)

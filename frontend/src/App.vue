@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <div v-if="loaded">
     <header>
       <Navbar />
     </header>

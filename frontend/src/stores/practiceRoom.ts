@@ -71,6 +71,21 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
                 })
     }
 
+    const getPracticeRoomById = async (id:string):Promise<object> => {
+        let room = {}
+
+        await axios
+                .get(`/api/room/${id}/`)
+                .then(response => {
+                    room = response.data
+                })
+                .catch(error => {
+                    toast.error('Something went wrong!', { autoClose: 3000 })
+                })
+
+        return room
+    }
+
     /*
         Fills the user practice room list with IPractieRoom objects
         from the api request result
@@ -92,6 +107,7 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
         // functions
         createPracticeRoom,
         getUserPracticeRooms,
+        getPracticeRoomById,
 
         // Vars
         practcieRoomCreateErrors,
