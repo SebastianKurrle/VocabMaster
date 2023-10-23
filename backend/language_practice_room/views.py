@@ -2,6 +2,9 @@ from rest_framework.response import Response
 from .serializers import LanguagePracticeRoomSerializer
 from rest_framework.views import APIView
 from .models import LanguagePracticeRoom
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from .permissons.is_practice_room_owner import IsPracticeRoomOwner
 
 
 class LanguagePracticeRoomView(APIView):
@@ -22,4 +25,17 @@ class LanguagePracticeRoomView(APIView):
         serializer = LanguagePracticeRoomSerializer(practice_rooms, many=True)
 
         return Response(serializer.data)
+
+
+class LanguagePracticeRoomDetailView(APIView):
+
+    permission_classes = [IsAuthenticated, IsPracticeRoomOwner]
+
+    def delete(self, request, room_id):
+        room = get_object_or_404(LanguagePracticeRoom, id=room_id)
+        self.check_object_permissions(request, room)
+
+        room.delete()
+
+        return Response(status=200)
 
