@@ -17,8 +17,10 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="loaded" class="card-grid">
-       <UserPracticeRoomCard v-for="room in practiceRoomStore.userPracticeRomms" :room="room"/>
+    <div>
+        <div v-if="loaded" class="card-grid">
+            <UserPracticeRoomCard v-for="room in practiceRoomStore.userPracticeRomms" :room="room"/>
+        </div>
     </div>        
 </template>
     

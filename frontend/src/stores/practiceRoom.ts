@@ -78,6 +78,7 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
     const fillPracticeRoomList = (result:Array<any>) => {
         result.map(room => {
             userPracticeRomms.push({
+                id: room.id,
                 name: room.name,
                 language: room.language,
                 description: room.description,

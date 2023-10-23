@@ -8,6 +8,7 @@ import { usePracticeRoomStore } from '@/stores/practiceRoom'
 const practiceRoomStore = usePracticeRoomStore()
 
 const practiceRoom = ref<IPracticeRoom>({
+    id: '',
     name: '',
     language: '',
     description: '',
@@ -29,10 +30,6 @@ const submitForm = async () => {
     practiceRoom.value.description = ''
     otherLangaugeName.value = ''
 }
-
-onMounted(() => {
-    initFlowbite();
-})
 </script>
 
 <template>
