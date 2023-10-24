@@ -4,12 +4,15 @@ import type { IPracticeRoom } from "@/assets/Interfaces/IPracticeRomm";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import { useUserStore } from "./user";
+import router from "@/router";
 
 export const usePracticeRoomStore = defineStore('practiceRoom', () => {
     // stores
     const userStore = useUserStore()
     
     const practcieRoomCreateErrors = reactive(Array())
+
+    const currentPracticeRoom = ref()
 
     const userPracticeRomms = reactive(Array())
     const registerdLanguages = reactive([
@@ -71,6 +74,9 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
                 })
     }
 
+    /*
+        Gets a practice room by the id from the api
+    */
     const getPracticeRoomById = async (id:string):Promise<object> => {
         let room = {}
 
@@ -78,12 +84,25 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
                 .get(`/api/room/${id}/`)
                 .then(response => {
                     room = response.data
+                    currentPracticeRoom.value = room
                 })
                 .catch(error => {
                     toast.error('Something went wrong!', { autoClose: 3000 })
                 })
 
         return room
+    }
+
+    const deletePracticeRoom = async () => {
+        await axios
+                .delete(`/api/room/${currentPracticeRoom.value.id}/`)
+                .then(response => {
+                    router.push({name: 'home'})
+                    toast.warning('Langauge Practice Room deleted!', { autoClose: 3000 })
+                })
+                .catch(error => {
+                    toast.error('Something went wrong', { autoClose: 3000 })
+                })
     }
 
     /*
@@ -108,9 +127,11 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
         createPracticeRoom,
         getUserPracticeRooms,
         getPracticeRoomById,
+        deletePracticeRoom,
 
         // Vars
         practcieRoomCreateErrors,
+        currentPracticeRoom,
         userPracticeRomms,
         registerdLanguages
     }

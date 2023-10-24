@@ -9,6 +9,7 @@ import router from './router'
 
 import './assets/main.css'
 import 'vue3-toastify/dist/index.css'
+import "tw-elements/dist/js/index.min.js"
 
 // fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'

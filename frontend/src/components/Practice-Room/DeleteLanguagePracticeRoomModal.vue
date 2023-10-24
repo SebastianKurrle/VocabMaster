@@ -1,47 +1,55 @@
 <script setup lang='ts'>
-import { usePracticeRoomStore } from '@/stores/practiceRoom';
-import { initFlowbite } from 'flowbite';
-import { onMounted, ref } from 'vue';
+import { usePracticeRoomStore } from '@/stores/practiceRoom';;
+import { onMounted } from 'vue';
 
 // stores
 const practiceRoomStore = usePracticeRoomStore()
-
-const test = () => {
-    console.log('hallo')
-}
 </script>
 
 <template>
-    <div id="deletePracticeRoomModal" tabindex="-1"
-        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <button type="button"
-                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="deletePracticeRoomModal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-6 text-center">
-                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete
-                        this product?</h3>
-                    <button data-modal-hide="deletePracticeRoomModal" type="button"
-                    @click="test"
-                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                        Yes, I'm sure
+    <!-- Modal -->
+    <div data-te-modal-init
+        class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+        id="deleteRoomModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div data-te-modal-dialog-ref
+            class="text-white pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
+            <div
+                class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none  bg-gray-700 bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+                <div
+                    class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                    <!--Modal title-->
+                    <h5 class="text-xl font-medium leading-normal text-white"
+                        id="exampleModalLabel">
+                        Delete Langauge Practice Room
+                    </h5>
+                    <!--Close button-->
+                    <button type="button"
+                        class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                        data-te-modal-dismiss aria-label="Close">
+                        <font-awesome-icon icon="fa-solid fa-x" />
                     </button>
-                    <button data-modal-hide="deletePracticeRoomModal" type="button"
-                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No,
-                        cancel</button>
+                </div>
+
+                <!--Modal body-->
+                <div class="relative flex-auto p-4 font-semibold text-red-600" data-te-modal-body-ref>
+                    <font-awesome-icon icon="fa-solid fa-circle-exclamation" /> <br/>
+                    Are you sure you want to delete <span class="text-white">{{ practiceRoomStore.currentPracticeRoom.name }}</span>
+                </div>
+
+                <!--Modal footer-->
+                <div
+                    class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                    <button type="button"
+                    data-te-modal-dismiss
+                    class="bg-gray-500 p-3 rounded-md hover:bg-gray-600 w-36 mr-3">
+                        Cancle
+                    </button>
+                    <button type="button"
+                    data-te-modal-dismiss
+                    @click="practiceRoomStore.deletePracticeRoom"
+                        class="bg-red-700 p-3 rounded-md hover:bg-red-800 w-36">
+                        Yes i`m sure
+                    </button>
                 </div>
             </div>
         </div>

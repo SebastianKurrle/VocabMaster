@@ -2,7 +2,6 @@
 import { usePracticeRoomStore } from '@/stores/practiceRoom';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-
 // components
 import LanguagePracticeRoomDetailInfo from '@/components/Practice-Room/LanguagePracticeRoomDetailInfo.vue';
 
