@@ -16,14 +16,16 @@ const loaded = ref(false)
 
 onMounted(async () => {
     room.value = await practiceRoomStore.getPracticeRoomById(String(route.params.id))
-    loaded.value = true
+    if (room.value.name) {
+        loaded.value = true
+    }
 })
 </script>
 
 <template>
     <div v-if="loaded" class="flex justify-center mt-3">
         <div class="w-full md:w-1/2">
-            <LanguagePracticeRoomDetailInfo :room="room"/>
+            <LanguagePracticeRoomDetailInfo />
         </div>
     </div>
 </template>

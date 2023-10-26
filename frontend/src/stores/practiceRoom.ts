@@ -11,6 +11,7 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
     const userStore = useUserStore()
     
     const practcieRoomCreateErrors = reactive(Array())
+    const practiceRoomUpdateErrors = reactive(Array())
 
     const currentPracticeRoom = ref()
 
@@ -93,6 +94,30 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
         return room
     }
 
+    const updatePracticeRoom = async (updatedPracticeRoom:IPracticeRoom) => {
+        practiceRoomUpdateErrors.length = 0
+
+        await axios
+                .put(`/api/room/${currentPracticeRoom.value.id}/`, updatedPracticeRoom)
+                .then(response => {
+                    toast.success('Updated!', { autoClose: 3000 })
+                    getPracticeRoomById(String(updatedPracticeRoom.id))
+                })
+                .catch(error => {
+                    if (error.response) {
+                        // Loops the server errors and push it in the errors array
+                        for (const property in error.response.data) {
+                            practiceRoomUpdateErrors.push(
+                                `${property}: ${error.response.data[property]}`
+                            );
+                        }
+                      }
+                })
+    }
+
+    /*
+        Delets the current selected practice room
+    */
     const deletePracticeRoom = async () => {
         await axios
                 .delete(`/api/room/${currentPracticeRoom.value.id}/`)
@@ -127,10 +152,12 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
         createPracticeRoom,
         getUserPracticeRooms,
         getPracticeRoomById,
+        updatePracticeRoom,
         deletePracticeRoom,
 
         // Vars
         practcieRoomCreateErrors,
+        practiceRoomUpdateErrors,
         currentPracticeRoom,
         userPracticeRomms,
         registerdLanguages
