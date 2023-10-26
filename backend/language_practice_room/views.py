@@ -38,6 +38,19 @@ class LanguagePracticeRoomDetailView(APIView):
 
         return Response(serializer.data)
 
+    def put(self, request, room_id):
+        room = get_object_or_404(LanguagePracticeRoom, id=room_id)
+        self.check_object_permissions(request, room)
+
+        serializer = LanguagePracticeRoomSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        serializer.update(room, serializer.validated_data)
+
+        return Response(status=200)
+
     def delete(self, request, room_id):
         room = get_object_or_404(LanguagePracticeRoom, id=room_id)
         self.check_object_permissions(request, room)
