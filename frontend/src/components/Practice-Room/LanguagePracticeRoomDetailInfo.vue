@@ -5,6 +5,7 @@ import { usePracticeRoomStore } from '@/stores/practiceRoom';
 // components
 import DeleteLanguagePracticeRoomModal from '@/components/Practice-Room/DeleteLanguagePracticeRoomModal.vue'
 import UpdateLanguagePracticeRoomModal from './UpdateLanguagePracticeRoomModal.vue';
+import CreateVocabularySetModal from '../Vocabulary-Set/CreateVocabularySetModal.vue';
 
 // stores
 const practiceRoomStore = usePracticeRoomStore()
@@ -22,7 +23,9 @@ const optionsActivated = ref(false)
         </div>
         <p class="mb-5 font-semibold text-blue-800 sm:text-lg">Learn new vocabularys</p>
         <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-            <button class="bg-gray-700 text-white p-3 rounded-md hover:bg-gray-800 mr-3">
+            <button class="bg-gray-700 text-white p-3 rounded-md hover:bg-gray-800 mr-3"
+            data-te-toggle="modal" data-te-target="#createVocabSetModal" data-te-ripple-init data-te-ripple-color="dark"
+            >
                 <font-awesome-icon icon="fa-solid fa-plus" /> New Vocabulary Set
             </button>
 
@@ -47,6 +50,7 @@ const optionsActivated = ref(false)
 
         <DeleteLanguagePracticeRoomModal />
         <UpdateLanguagePracticeRoomModal />
+        <CreateVocabularySetModal />
     </div>
 </template>
 
