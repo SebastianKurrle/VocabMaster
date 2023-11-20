@@ -6,6 +6,7 @@ import { usePracticeRoomStore } from '@/stores/practiceRoom';
 import DeleteLanguagePracticeRoomModal from '@/components/Practice-Room/DeleteLanguagePracticeRoomModal.vue'
 import UpdateLanguagePracticeRoomModal from './UpdateLanguagePracticeRoomModal.vue';
 import CreateVocabularySetModal from '../Vocabulary-Set/CreateVocabularySetModal.vue';
+import BackButton from '../GeneralButtons/BackButton.vue';
 
 // stores
 const practiceRoomStore = usePracticeRoomStore()
@@ -17,6 +18,11 @@ const optionsActivated = ref(false)
     <div
         class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">{{ practiceRoomStore.currentPracticeRoom.name }}</h5>
+
+        <div class="flex mb-3">
+            <BackButton destination="home"/>
+        </div>
+
         <p class="mb-5 text-base text-left text-gray-900 font-semibold sm:text-lg dark:text-gray-400">Language: {{ practiceRoomStore.currentPracticeRoom.language }}</p>
         <div class="bg-gray-700 rounded-md p-3 mb-3">
             <p class="text-base text-left text-gray-300 sm:text-lg dark:text-gray-400">{{ practiceRoomStore.currentPracticeRoom.description }}</p>

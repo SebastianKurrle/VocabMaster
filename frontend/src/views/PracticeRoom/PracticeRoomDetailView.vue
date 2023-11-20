@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 // components
 import LanguagePracticeRoomDetailInfo from '@/components/Practice-Room/LanguagePracticeRoomDetailInfo.vue';
+import VocabularySetList from '@/components/Vocabulary-Set/VocabularySetList.vue';
 
 // stores
 const practiceRoomStore = usePracticeRoomStore()
@@ -23,9 +24,17 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="loaded" class="flex justify-center mt-3">
-        <div class="w-full md:w-1/2">
-            <LanguagePracticeRoomDetailInfo />
+    <div v-if="loaded">
+        <div class="flex justify-center mt-3">
+            <div class="w-full md:w-1/2">
+                <LanguagePracticeRoomDetailInfo />
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <div>
+                <VocabularySetList />
+            </div>
         </div>
     </div>
 </template>

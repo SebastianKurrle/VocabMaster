@@ -24,8 +24,12 @@ class VocabularySetView(APIView):
 
     def get(self, request):
         # Security
-        data = request.data
-        room = get_object_or_404(LanguagePracticeRoom, id=data['id'])  # id is in the body of the request data
+        room_id = request.query_params.get('roomId', None)
+
+        if room_id is None:
+            return Response({'error': 'Parameter roomId is missing'}, status=400)
+
+        room = get_object_or_404(LanguagePracticeRoom, id=room_id)  # id is in the body of the request data
         self.check_object_permissions(request, room)
 
         # Filter the Vocabulary Sets
