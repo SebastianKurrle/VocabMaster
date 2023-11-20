@@ -55,3 +55,33 @@ class VocabularySetView(APIView):
         serializer = VocabularySetSerializer(vocab_sets, many=True)
 
         return Response(serializer.data, status=200)
+
+
+class VocabularySetDetailView(APIView):
+    permission_classes = [IsAuthenticated, IsPracticeRoomOwner]
+
+    def get(self, request, set_id):
+        # Security
+        room_id = request.query_params.get('roomId', None)
+
+        if room_id is None:
+            return Response({'error': 'Parameter roomId is missing'}, status=400)
+
+        room = get_object_or_404(LanguagePracticeRoom, id=room_id)
+        self.check_object_permissions(request, room)
+
+        if not self.check_vocab_set_is_from_room(room_id, set_id):
+            return Response({'error': 'Vocabulary set is not from the given practice room'}, status=400)
+
+        return self.get_vocabulary_set_by_id(set_id)
+
+    @staticmethod
+    def get_vocabulary_set_by_id(set_id):
+        vocabulary_set = get_object_or_404(VocabularySet, id=set_id)
+        serializer = VocabularySetSerializer(vocabulary_set)
+
+        return Response(serializer.data, status=200)
+
+    @staticmethod
+    def check_vocab_set_is_from_room(room_id, set_id):
+        return len(VocabularySet.objects.filter(id=set_id, room=room_id)) > 0
