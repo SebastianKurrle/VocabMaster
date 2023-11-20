@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .forms import VocabularySetCreateForm
+from .serializers import VocabularySetSerializer
 from rest_framework.permissions import IsAuthenticated
 from language_practice_room.permissons.is_practice_room_owner import IsPracticeRoomOwner
 from .models import VocabularySet
@@ -21,6 +22,15 @@ class VocabularySetView(APIView):
         # Create VocabularySet
         return self.create_vocabulary_set(data)
 
+    def get(self, request):
+        # Security
+        data = request.data
+        room = get_object_or_404(LanguagePracticeRoom, id=data['id'])  # id is in the body of the request data
+        self.check_object_permissions(request, room)
+
+        # Filter the Vocabulary Sets
+        return self.get_all_vocabulary_sets_from_room(room)
+
     # Helper Methods
     @staticmethod
     # Create a VocabularySet and returns an error response or a success response
@@ -33,3 +43,11 @@ class VocabularySetView(APIView):
         create_form.save()
 
         return Response({'status': 'success'}, status=201)
+
+    @staticmethod
+    # Gets all VocabularySets serialized and returns a response with the data
+    def get_all_vocabulary_sets_from_room(room):
+        vocab_sets = VocabularySet.objects.filter(room=room)
+        serializer = VocabularySetSerializer(vocab_sets, many=True)
+
+        return Response(serializer.data, status=200)
