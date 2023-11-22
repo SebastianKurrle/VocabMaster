@@ -86,6 +86,7 @@ export const usePracticeRoomStore = defineStore('practiceRoom', () => {
                 .then(response => {
                     room = response.data
                     currentPracticeRoom.value = room
+                    localStorage.setItem('currentPracticeRoom', JSON.stringify(room))
                 })
                 .catch(error => {
                     toast.error('Something went wrong!', { autoClose: 3000 })

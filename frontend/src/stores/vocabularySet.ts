@@ -15,6 +15,9 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
     // lists
     const roomVocaublarySets = reactive<Array<IVocabSet>>(Array<IVocabSet>())
 
+    // VARS
+    const currentVocabularySet = ref<IVocabSet>()
+
     // API Call functions
 
     /*
@@ -41,6 +44,10 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
                 })
     }
 
+    /*
+        Gets all Vocabulary Sets from a practice room by the id from the room
+        and pushs all sets in the list
+    */
     const getAllVocaublarySetsFromPracticeRoom = async (roomId:string) => {
         roomVocaublarySets.length = 0
 
@@ -53,6 +60,24 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
                 .catch(error => {
                     toast.error('Something went wrong', { autoClose: 3000 })
                 })
+    }
+
+    const getVocabularySetById = async (vocabSetId:string) => {
+        await axios
+            .get(`/api/set/${vocabSetId}/?roomId=${practiceRoomStore.currentPracticeRoom.id}`)
+            .then(response => {
+                currentVocabularySet.value = {
+                    id: response.data.id,
+                    name: response.data.name,
+                    description: response.data.description,
+                    room: response.data.room
+                }
+
+                localStorage.setItem('currentVocabularySet', JSON.stringify(currentVocabularySet.value))
+            })
+            .catch(error => {
+                toast.error('Something went wrong!', { autoClose: 3000 })
+            })
     }
 
     // Helper functions
@@ -75,9 +100,11 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
         // Vars
             createVocabSetErrors,
             roomVocaublarySets,
+            currentVocabularySet,
 
         // Functions
             createVocabularySet,
-            getAllVocaublarySetsFromPracticeRoom
+            getAllVocaublarySetsFromPracticeRoom,
+            getVocabularySetById
     }
 })

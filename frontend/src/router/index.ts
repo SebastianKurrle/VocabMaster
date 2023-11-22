@@ -6,6 +6,7 @@ import SignUpView from '../views/User/SignUpView.vue'
 import SignInView from '../views/User/SignInView.vue'
 import AccountView from '@/views/User/AccountView.vue'
 import PracticeRoomDetailView from '@/views/PracticeRoom/PracticeRoomDetailView.vue'
+import VocabularySetDetailView from '@/views/Vocabulary-Set/VocabularySetDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/room/:id',
       name: 'room-detail',
       component: PracticeRoomDetailView
+    },
+    {
+      path: '/room/vocabulary-set/:id',
+      name: 'set-detail',
+      component: VocabularySetDetailView
     },
   ]
 })
