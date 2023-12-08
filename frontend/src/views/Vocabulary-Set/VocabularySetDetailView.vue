@@ -5,6 +5,9 @@ import { useVocabularySetStore } from '@/stores/vocabularySet';
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router';
 
+// components
+import VocabularySetDetailInfo from '@/components/Vocabulary-Set/VocabularySetDetailInfo.vue'
+
 // stores
 const userStore = useUserStore()
 const vocabularySetStore = useVocabularySetStore()
@@ -25,8 +28,12 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div>
-        <h5 class="text-white">TEST</h5>    
+    <div v-if="loaded">
+        <div class="flex justify-center mt-3">
+            <div class="w-full md:w-1/2">
+                <VocabularySetDetailInfo />
+            </div>
+        </div>  
     </div>
 </template>
     
