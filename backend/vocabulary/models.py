@@ -11,4 +11,4 @@ class Vocabulary(models.Model):
     vocab_set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
