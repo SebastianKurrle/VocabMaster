@@ -57,7 +57,8 @@ INSTALLED_APPS = [
 
     'user',
     'language_practice_room',
-    'vocabulary_set'
+    'vocabulary_set',
+    'vocabulary'
 ]
 
 MIDDLEWARE = [
