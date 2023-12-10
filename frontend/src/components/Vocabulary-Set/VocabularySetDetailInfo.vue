@@ -9,10 +9,12 @@ import DeleteVocabularySetModal from './DeleteVocabularySetModal.vue';
 import UpdateVocabularySetModal from './UpdateVocabularySetModal.vue';
 import CreateVocabularyModal from './Vocabulary/CreateVocabularyModal.vue'
 import VocabularyListModal from './Vocabulary/VocabularyListModal.vue';
+import { useVocabularyStore } from '@/stores/vocabulary';
 
 
 // stores
 const vocabularySetStore = useVocabularySetStore()
+const vocabularyStore = useVocabularyStore()
 const practiceRoomStore = usePracticeRoomStore()
 
 const optionsActivated = ref(false)
@@ -40,7 +42,7 @@ const optionsActivated = ref(false)
             </button>
 
             <button class="bg-gray-700 text-white p-3 rounded-md hover:bg-gray-800 mr-3" data-te-toggle="modal"
-            data-te-target="#vocabularyList" data-te-ripple-init data-te-ripple-color="dark">
+            data-te-target="#vocabularyList" data-te-ripple-init data-te-ripple-color="dark" @click="vocabularyStore.getAllVocabularyFromSet">
             <font-awesome-icon icon="fa-solid fa-list" /> Vocabulary List
         </button>
 
