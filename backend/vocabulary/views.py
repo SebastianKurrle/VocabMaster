@@ -6,6 +6,7 @@ from vocabulary_set.models import VocabularySet
 from rest_framework.permissions import IsAuthenticated
 from vocabulary_set.permissons.is_vocabulary_set_owner import IsVocabularySetOwner
 from django.shortcuts import get_object_or_404
+from .models import Vocabulary
 
 
 class VocabularyView(APIView):
@@ -23,9 +24,27 @@ class VocabularyView(APIView):
 
         return self.create_vocabulary(data)
 
+    def get(self, request):
+        vocab_set_id = request.query_params.get('setId', None)
+
+        if vocab_set_id is None:
+            return Response({'error': 'Parameter setId is missing'}, status=400)
+
+        vocab_set = get_object_or_404(VocabularySet, id=vocab_set_id)
+        self.check_object_permissions(request, vocab_set)
+
+        return self.get_all_vocabulary_from_set(vocab_set)
+
     def post_security(self, request, vocab_set_id):
         vocab_set = get_object_or_404(VocabularySet, id=vocab_set_id)
         self.check_object_permissions(request, vocab_set)
+
+    @staticmethod
+    def get_all_vocabulary_from_set(vocab_set: VocabularySet):
+        vocabulary = Vocabulary.objects.filter(vocabSet=vocab_set)
+        serializer = VocabularySerializer(vocabulary, many=True)
+
+        return Response(serializer.data)
 
     @staticmethod
     def create_vocabulary(sent_data):
