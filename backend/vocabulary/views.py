@@ -14,8 +14,7 @@ class VocabularyView(APIView):
     def post(self, request):
         # Security
         data = request.data
-        print(data)
-        vocab_set_id = data.get('vocab_set', None)
+        vocab_set_id = data.get('vocabSet', None)
 
         if vocab_set_id is None:
             return Response({'error': 'Parameter vocab_set_id is missing'}, status=400)
