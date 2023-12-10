@@ -56,3 +56,25 @@ class VocabularyView(APIView):
         create_form.save()
 
         return Response({'status': 'success'}, status=201)
+
+
+class VocabularyDetailView(APIView):
+    permission_classes = [IsAuthenticated, IsVocabularySetOwner]
+
+    def put(self, request, vocab_id):
+        vocab = get_object_or_404(Vocabulary, id=vocab_id)
+        vocab_set = get_object_or_404(VocabularySet, id=vocab.vocabSet.id)
+        self.check_object_permissions(request, vocab_set)
+
+        return self.update_vocabulary(vocab, request.data)
+
+    @staticmethod
+    def update_vocabulary(vocabulary: Vocabulary, sent_data: dict):
+        serializer = VocabularySerializer(data=sent_data)
+
+        if not serializer.is_valid(raise_exception=True):
+            return Response(serializer.errors, status=400)
+
+        serializer.update(vocabulary, serializer.validated_data)
+
+        return Response({'status': 'success'}, status=200)
