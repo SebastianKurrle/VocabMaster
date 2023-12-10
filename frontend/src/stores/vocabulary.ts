@@ -50,6 +50,14 @@ export const useVocabularyStore = defineStore('vocabulary', () => {
             })
     }
 
+    const updateVocabulary = (updatedVocabulary:IVocabulary) => {
+        axios
+            .put(`/api/vocabulary/${updatedVocabulary.id}/`, updatedVocabulary)
+            .catch(error => {
+                toast.error(`Vocabulary ${updatedVocabulary.nativeWord} - ${updatedVocabulary.foreignWord} not updated!`)
+            })
+    }
+
     const fillsetVocabulary = (res: Array<any>): void => {
         res.map(voc => {
             setVocabulary.push({
@@ -65,6 +73,7 @@ export const useVocabularyStore = defineStore('vocabulary', () => {
         // Vars
         createVocabularyErrors,
         getAllVocabularyFromSet,
+        updateVocabulary,
 
         // Functions
         createVocabulary,

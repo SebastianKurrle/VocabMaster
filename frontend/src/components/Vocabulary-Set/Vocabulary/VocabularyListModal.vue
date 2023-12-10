@@ -2,9 +2,18 @@
 // components
 import { useVocabularyStore } from '@/stores/vocabulary';
 import VocabularyList from './VocabularyList.vue';
+import { toast } from 'vue3-toastify';
 
 // stores
 const vocabularyStore = useVocabularyStore()
+
+const updateVocabList = async () => {
+    vocabularyStore.setVocabulary.map(vocab => {
+        vocabularyStore.updateVocabulary(vocab)
+    })
+
+    toast.success('List updated', { autoClose: 3000 })
+}
 </script>
 
 <template>
@@ -34,7 +43,7 @@ const vocabularyStore = useVocabularyStore()
                 <div class="relative p-4 text-white">
                     <VocabularyList />
 
-                    <button class="bg-green-500 p-3 rounded-md hover:bg-green-600 w-full" @click="console.log(vocabularyStore.setVocabulary)">Save List</button>
+                    <button class="bg-green-500 p-3 rounded-md hover:bg-green-600 w-full" @click="updateVocabList">Save List</button>
                 </div>
             </div>
         </div>
