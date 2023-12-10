@@ -68,6 +68,13 @@ class VocabularySetDetailView(APIView):
 
         return self.get_vocabulary_set_by_id(vocab_set)
 
+    def put(self, request, set_id):
+        # Security
+        vocab_set = get_object_or_404(VocabularySet, id=set_id)
+        self.check_object_permissions(request, vocab_set)
+
+        return self.update_vocab_set(vocab_set, request.data)
+
     def delete(self, request, set_id):
         # Security
         vocab_set = get_object_or_404(VocabularySet, id=set_id)
@@ -79,6 +86,17 @@ class VocabularySetDetailView(APIView):
     def get_vocabulary_set_by_id(vocab_set: VocabularySet):
         serializer = VocabularySetSerializer(vocab_set)
         return Response(serializer.data, status=200)
+
+    @staticmethod
+    def update_vocab_set(vocab_set: VocabularySet, sent_data: dict):
+        serializer = VocabularySetSerializer(data=sent_data)
+
+        if not serializer.is_valid(raise_exception=True):
+            return Response(serializer.errors, status=400)
+
+        serializer.update(vocab_set, serializer.validated_data)
+
+        return Response({'status': 'success'}, status=200)
 
     @staticmethod
     def delete_vocab_set(vocab_set: VocabularySet):
