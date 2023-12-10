@@ -68,6 +68,13 @@ class VocabularyDetailView(APIView):
 
         return self.update_vocabulary(vocab, request.data)
 
+    def delete(self, request, vocab_id):
+        vocab = get_object_or_404(Vocabulary, id=vocab_id)
+        vocab_set = get_object_or_404(VocabularySet, id=vocab.vocabSet.id)
+        self.check_object_permissions(request, vocab_set)
+
+        return self.delete_vocabulary(vocab)
+
     @staticmethod
     def update_vocabulary(vocabulary: Vocabulary, sent_data: dict):
         serializer = VocabularySerializer(data=sent_data)
@@ -78,3 +85,9 @@ class VocabularyDetailView(APIView):
         serializer.update(vocabulary, serializer.validated_data)
 
         return Response({'status': 'success'}, status=200)
+
+    @staticmethod
+    def delete_vocabulary(vocabulary: Vocabulary):
+        vocabulary.delete()
+
+        return Response(status=204)
