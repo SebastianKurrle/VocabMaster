@@ -64,7 +64,7 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
 
     const getVocabularySetById = async (vocabSetId:string) => {
         await axios
-            .get(`/api/set/${vocabSetId}/?roomId=${practiceRoomStore.currentPracticeRoom.id}`)
+            .get(`/api/set/${vocabSetId}/`)
             .then(response => {
                 currentVocabularySet.value = {
                     id: response.data.id,

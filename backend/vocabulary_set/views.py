@@ -4,6 +4,7 @@ from .forms import VocabularySetCreateForm
 from .serializers import VocabularySetSerializer
 from rest_framework.permissions import IsAuthenticated
 from language_practice_room.permissons.is_practice_room_owner import IsPracticeRoomOwner
+from .permissons.is_vocabulary_set_owner import IsVocabularySetOwner
 from .models import VocabularySet
 from language_practice_room.models import LanguagePracticeRoom
 from django.shortcuts import get_object_or_404
@@ -58,30 +59,29 @@ class VocabularySetView(APIView):
 
 
 class VocabularySetDetailView(APIView):
-    permission_classes = [IsAuthenticated, IsPracticeRoomOwner]
+    permission_classes = [IsAuthenticated, IsVocabularySetOwner]
 
     def get(self, request, set_id):
         # Security
-        room_id = request.query_params.get('roomId', None)
+        vocab_set = get_object_or_404(VocabularySet, id=set_id)
+        self.check_object_permissions(request, vocab_set)
 
-        if room_id is None:
-            return Response({'error': 'Parameter roomId is missing'}, status=400)
+        return self.get_vocabulary_set_by_id(vocab_set)
 
-        room = get_object_or_404(LanguagePracticeRoom, id=room_id)
-        self.check_object_permissions(request, room)
+    def delete(self, request, set_id):
+        # Security
+        vocab_set = get_object_or_404(VocabularySet, id=set_id)
+        self.check_object_permissions(request, vocab_set)
 
-        if not self.check_vocab_set_is_from_room(room_id, set_id):
-            return Response({'error': 'Vocabulary set is not from the given practice room'}, status=400)
-
-        return self.get_vocabulary_set_by_id(set_id)
+        return self.delete_vocab_set(vocab_set)
 
     @staticmethod
-    def get_vocabulary_set_by_id(set_id):
-        vocabulary_set = get_object_or_404(VocabularySet, id=set_id)
-        serializer = VocabularySetSerializer(vocabulary_set)
-
+    def get_vocabulary_set_by_id(vocab_set: VocabularySet):
+        serializer = VocabularySetSerializer(vocab_set)
         return Response(serializer.data, status=200)
 
     @staticmethod
-    def check_vocab_set_is_from_room(room_id, set_id):
-        return len(VocabularySet.objects.filter(id=set_id, room=room_id)) > 0
+    def delete_vocab_set(vocab_set: VocabularySet):
+        vocab_set.delete()
+
+        return Response(status=204)
