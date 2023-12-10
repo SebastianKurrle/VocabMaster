@@ -6,6 +6,7 @@ import { ref } from 'vue';
 // components
 import BackButton from '../GeneralButtons/BackButton.vue';
 import DeleteVocabularySetModal from './DeleteVocabularySetModal.vue';
+import UpdateVocabularySetModal from './UpdateVocabularySetModal.vue';
 
 
 // stores
@@ -51,7 +52,7 @@ const optionsActivated = ref(false)
         <div class="mt-3" v-if="optionsActivated">
             <h5 class="text-lg font-semibold text-blue-800 mb-3">Options</h5>
             <button class="bg-gray-800 p-3 w-32 rounded-md text-white hover:bg-gray-900 mr-3" data-te-toggle="modal"
-                data-te-target="#updateRoomModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
+                data-te-target="#updateSetModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
                     icon="fa-solid fa-pen-to-square" /> Edit</button>
             <button class="bg-red-800 p-3 w-32 rounded-md text-white hover:bg-red-900" data-te-toggle="modal"
                 data-te-target="#deleteSetModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
@@ -59,6 +60,7 @@ const optionsActivated = ref(false)
         </div>
 
         <DeleteVocabularySetModal />
+        <UpdateVocabularySetModal />
     </div>
 </template>
 

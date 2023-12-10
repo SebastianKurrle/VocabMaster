@@ -9,9 +9,10 @@ import router from "@/router";
 export const useVocabularySetStore = defineStore('vocabularySet', () => {
     // stores
     const practiceRoomStore = usePracticeRoomStore()
-    
+
     // Error lists
     const createVocabSetErrors = reactive(Array())
+    const updateVocabSetErrors = reactive(Array())
 
     // lists
     const roomVocaublarySets = reactive<Array<IVocabSet>>(Array<IVocabSet>())
@@ -24,46 +25,46 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
     /*
         Sends an API request to create a vocabulary set
     */
-    const createVocabularySet = async (vocabSetForm:IVocabSet) => {
+    const createVocabularySet = async (vocabSetForm: IVocabSet) => {
         createVocabSetErrors.length = 0
 
         await axios
-                .post('/api/set/', vocabSetForm)
-                .then(response => {
-                    toast.success('Vocabulary Set Created!', { autoClose: 3000 })
-                    getAllVocaublarySetsFromPracticeRoom(practiceRoomStore.currentPracticeRoom.id)
-                })
-                .catch(error => {
-                    if (error.response) {
-                        // Loops the server errors and push it in the errors array
-                        for (const property in error.response.data.status) {
-                            createVocabSetErrors.push(
-                                `${property}: ${error.response.data.status[property]}`
-                            );
-                        }
-                      }
-                })
+            .post('/api/set/', vocabSetForm)
+            .then(response => {
+                toast.success('Vocabulary Set Created!', { autoClose: 3000 })
+                getAllVocaublarySetsFromPracticeRoom(practiceRoomStore.currentPracticeRoom.id)
+            })
+            .catch(error => {
+                if (error.response) {
+                    // Loops the server errors and push it in the errors array
+                    for (const property in error.response.data.status) {
+                        createVocabSetErrors.push(
+                            `${property}: ${error.response.data.status[property]}`
+                        );
+                    }
+                }
+            })
     }
 
     /*
         Gets all Vocabulary Sets from a practice room by the id from the room
         and pushs all sets in the list
     */
-    const getAllVocaublarySetsFromPracticeRoom = async (roomId:string) => {
+    const getAllVocaublarySetsFromPracticeRoom = async (roomId: string) => {
         roomVocaublarySets.length = 0
 
         await axios
-                .get(`/api/set/?roomId=${roomId}`)
-                .then(response => {
-                    const result:Array<any> = response.data
-                    fillRoomVocabularySetsList(result)
-                })
-                .catch(error => {
-                    toast.error('Something went wrong', { autoClose: 3000 })
-                })
+            .get(`/api/set/?roomId=${roomId}`)
+            .then(response => {
+                const result: Array<any> = response.data
+                fillRoomVocabularySetsList(result)
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
     }
 
-    const getVocabularySetById = async (vocabSetId:string) => {
+    const getVocabularySetById = async (vocabSetId: string) => {
         await axios
             .get(`/api/set/${vocabSetId}/`)
             .then(response => {
@@ -81,6 +82,27 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
             })
     }
 
+    const updateVocabularySet = (updatedVocabSet: IVocabSet) => {
+        updateVocabSetErrors.length = 0
+
+        axios
+            .put(`/api/set/${currentVocabularySet.value?.id}/`, updatedVocabSet)
+            .then(response => {
+                toast.success('Updated!', { autoClose: 3000 })
+                getVocabularySetById(String(updatedVocabSet.id))
+            })
+            .catch(error => {
+                if (error.response) {
+                    // Loops the server errors and push it in the errors array
+                    for (const property in error.response.data) {
+                        updateVocabSetErrors.push(
+                            `${property}: ${error.response.data[property]}`
+                        );
+                    }
+                }
+            })
+    }
+
     /*
         Calls the API to delete a VocabularySet by the id
     */
@@ -88,8 +110,8 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
         axios
             .delete(`/api/set/${currentVocabularySet.value?.id}`)
             .then(response => {
-                toast.warn('Vocabulary Set deleted', { autoClose: 3000})
-                router.push({name: 'room-detail', params: { id: practiceRoomStore.currentPracticeRoom.id }})
+                toast.warn('Vocabulary Set deleted', { autoClose: 3000 })
+                router.push({ name: 'room-detail', params: { id: practiceRoomStore.currentPracticeRoom.id } })
             })
             .catch(error => {
                 toast.error('Something went wrong', { autoClose: 3000 })
@@ -101,7 +123,7 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
     /*
         Fills the roomVocaublarySet list with IVocabSet objects from the api response
     */
-    const fillRoomVocabularySetsList = (res:Array<any>):void => {
+    const fillRoomVocabularySetsList = (res: Array<any>): void => {
         res.map(set => {
             roomVocaublarySets.push({
                 id: set.id,
@@ -114,14 +136,16 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
 
     return {
         // Vars
-            createVocabSetErrors,
-            roomVocaublarySets,
-            currentVocabularySet,
+        createVocabSetErrors,
+        updateVocabSetErrors,
+        roomVocaublarySets,
+        currentVocabularySet,
 
         // Functions
-            createVocabularySet,
-            getAllVocaublarySetsFromPracticeRoom,
-            getVocabularySetById,
-            deleteVocabularySet
+        createVocabularySet,
+        getAllVocaublarySetsFromPracticeRoom,
+        getVocabularySetById,
+        updateVocabularySet,
+        deleteVocabularySet
     }
 })
