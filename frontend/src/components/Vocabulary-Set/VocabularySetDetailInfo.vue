@@ -5,6 +5,7 @@ import { ref } from 'vue';
 
 // components
 import BackButton from '../GeneralButtons/BackButton.vue';
+import DeleteVocabularySetModal from './DeleteVocabularySetModal.vue';
 
 
 // stores
@@ -53,9 +54,11 @@ const optionsActivated = ref(false)
                 data-te-target="#updateRoomModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
                     icon="fa-solid fa-pen-to-square" /> Edit</button>
             <button class="bg-red-800 p-3 w-32 rounded-md text-white hover:bg-red-900" data-te-toggle="modal"
-                data-te-target="#deleteRoomModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
+                data-te-target="#deleteSetModal" data-te-ripple-init data-te-ripple-color="dark"><font-awesome-icon
                     icon="fa-solid fa-trash" /> Delete</button>
         </div>
+
+        <DeleteVocabularySetModal />
     </div>
 </template>
 

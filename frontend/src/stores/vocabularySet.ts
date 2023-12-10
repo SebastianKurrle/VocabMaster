@@ -4,6 +4,7 @@ import axios from "axios";
 import type { IVocabSet } from "@/assets/Interfaces/IVocabSet";
 import { toast } from "vue3-toastify";
 import { usePracticeRoomStore } from "./practiceRoom";
+import router from "@/router";
 
 export const useVocabularySetStore = defineStore('vocabularySet', () => {
     // stores
@@ -80,6 +81,21 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
             })
     }
 
+    /*
+        Calls the API to delete a VocabularySet by the id
+    */
+    const deleteVocabularySet = () => {
+        axios
+            .delete(`/api/set/${currentVocabularySet.value?.id}`)
+            .then(response => {
+                toast.warn('Vocabulary Set deleted', { autoClose: 3000})
+                router.push({name: 'room-detail', params: { id: practiceRoomStore.currentPracticeRoom.id }})
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+    }
+
     // Helper functions
 
     /*
@@ -105,6 +121,7 @@ export const useVocabularySetStore = defineStore('vocabularySet', () => {
         // Functions
             createVocabularySet,
             getAllVocaublarySetsFromPracticeRoom,
-            getVocabularySetById
+            getVocabularySetById,
+            deleteVocabularySet
     }
 })
