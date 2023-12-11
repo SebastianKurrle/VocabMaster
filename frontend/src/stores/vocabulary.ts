@@ -58,6 +58,18 @@ export const useVocabularyStore = defineStore('vocabulary', () => {
             })
     }
 
+    const deleteVocabulary = (vocabId:string) => {
+        axios
+            .delete(`/api/vocabulary/${vocabId}/`)
+            .then(response => {
+                toast.warning('Vocabulary deleted', { autoClose: 3000 })
+                getAllVocabularyFromSet()
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+    }
+
     const fillsetVocabulary = (res: Array<any>): void => {
         res.map(voc => {
             setVocabulary.push({
@@ -74,6 +86,7 @@ export const useVocabularyStore = defineStore('vocabulary', () => {
         createVocabularyErrors,
         getAllVocabularyFromSet,
         updateVocabulary,
+        deleteVocabulary,
 
         // Functions
         createVocabulary,

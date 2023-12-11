@@ -23,7 +23,9 @@ const update = () => {
             v-model="vocab.nativeWord" @change="update"></td>
         <td class="whitespace-nowrap px-6 py-4 text-gray-700"><input type="text" class="rounded-md" v-model="vocab.foreignWord" @change="update"></td>
         <td class="whitespace-nowrap px-6 py-4">
-            <button class="bg-red-800 p-3 w-20 rounded-md hover:bg-red-900"><font-awesome-icon icon="fa-solid fa-trash" /></button>
+            <button class="bg-red-800 p-3 w-20 rounded-md hover:bg-red-900"
+            @click="vocabularyStore.deleteVocabulary(vocab.id)"
+            ><font-awesome-icon icon="fa-solid fa-trash" /></button>
         </td>
     </tr>
 </template>
