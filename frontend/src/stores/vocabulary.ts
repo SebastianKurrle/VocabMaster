@@ -25,14 +25,7 @@ export const useVocabularyStore = defineStore('vocabulary', () => {
                 toast.success('Added Vocabulary', { autoClose: 3000 })
             })
             .catch(error => {
-                if (error.response) {
-                    // Loops the server errors and push it in the errors array
-                    for (const property in error.response.data.status) {
-                        createVocabularyErrors.push(
-                            `${property}: ${error.response.data.status[property]}`
-                        );
-                    }
-                }
+                toast.error('Something went wrong', { autoClose: 3000 })
             })
     }
 

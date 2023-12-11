@@ -2,6 +2,8 @@
 import { useVocabularyStore } from '@/stores/vocabulary';
 import VocabularyListItem from './VocabularyListItem.vue';
 
+// components
+import AddVocabularyRow from './AddVocabularyRow.vue';
 
 // stores
 const vocabularyStore = useVocabularyStore()
@@ -25,6 +27,7 @@ const vocabularyStore = useVocabularyStore()
                                 </thead>
                                 <tbody>
                                     <VocabularyListItem v-for="(vocab, index) in vocabularyStore.setVocabulary" :vocab="vocab" :index="index+1"/>
+                                    <AddVocabularyRow />
                                 </tbody>
                             </table>
                         </div>
