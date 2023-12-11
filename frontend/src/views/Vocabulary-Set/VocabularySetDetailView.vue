@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 
 // components
 import VocabularySetDetailInfo from '@/components/Vocabulary-Set/VocabularySetDetailInfo.vue'
+import PracticeVocabularyContainer from '@/components/Vocabulary-Set/Vocabulary/Practice/PracticeVocabularyContainer.vue';
 
 // stores
 const userStore = useUserStore()
@@ -32,8 +33,9 @@ onMounted(async () => {
         <div class="flex justify-center mt-3">
             <div class="w-full md:w-1/2">
                 <VocabularySetDetailInfo />
+                <PracticeVocabularyContainer />
             </div>
-        </div>  
+        </div>
     </div>
 </template>
     

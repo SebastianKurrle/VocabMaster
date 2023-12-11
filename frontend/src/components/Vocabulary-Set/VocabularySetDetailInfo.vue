@@ -9,12 +9,14 @@ import DeleteVocabularySetModal from './DeleteVocabularySetModal.vue';
 import UpdateVocabularySetModal from './UpdateVocabularySetModal.vue';
 import VocabularyListModal from './Vocabulary/VocabularyListModal.vue';
 import { useVocabularyStore } from '@/stores/vocabulary';
+import { usePracticeVocabularySetStore } from '@/stores/practiceVocabularySet';
 
 
 // stores
 const vocabularySetStore = useVocabularySetStore()
 const vocabularyStore = useVocabularyStore()
 const practiceRoomStore = usePracticeRoomStore()
+const practiceVocabularySetStore = usePracticeVocabularySetStore()
 
 const optionsActivated = ref(false)
 </script>
@@ -36,6 +38,7 @@ const optionsActivated = ref(false)
         <p class="mb-5 font-semibold text-blue-800 sm:text-lg">Manage Vocabulary Set</p>
         <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
             <button class="bg-gray-700 text-white p-3 rounded-md hover:bg-gray-800 mr-3" data-te-toggle="modal"
+            v-if="!practiceVocabularySetStore.practiceIsRunning"
             data-te-target="#vocabularyList" data-te-ripple-init data-te-ripple-color="dark" @click="vocabularyStore.getAllVocabularyFromSet">
             <font-awesome-icon icon="fa-solid fa-list" /> Vocabulary List
         </button>
