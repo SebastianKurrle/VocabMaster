@@ -4,6 +4,7 @@ import { onMounted } from 'vue';
 
 // components
 import PracticeVocabularyInput from './PracticeVocabularyInput.vue';
+import PracticeVocabularyEndStatistics from './PracticeVocabularyEndStatistics.vue';
 
 // stores
 const practiceVocabularyStore = usePracticeVocabularySetStore()
@@ -26,7 +27,11 @@ const practiceVocabularyStore = usePracticeVocabularySetStore()
                 <PracticeVocabularyInput />
             </div>
 
-            <button class="bg-red-600 hover:bg-red-700 p-3 w-full rounded-md text-white"
+            <div v-else>
+                <PracticeVocabularyEndStatistics />
+            </div>
+
+            <button class="bg-red-600 hover:bg-red-700 p-3 w-full rounded-md text-white mt-3"
                 @click="practiceVocabularyStore.endPractice">
                 End Practice <font-awesome-icon icon="fa-solid fa-dumbbell" />
             </button>
