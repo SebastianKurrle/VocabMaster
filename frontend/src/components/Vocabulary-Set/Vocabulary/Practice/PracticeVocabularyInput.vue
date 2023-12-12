@@ -12,7 +12,7 @@ watch(isCheckSuccessful, (newValue) => {
   if (newValue !== null) {
     setTimeout(() => {
       isCheckSuccessful.value = null;
-    }, 2000);
+    }, 3000);
 
     solution.value = ''
   }
@@ -40,6 +40,14 @@ const checkInput = () => {
     >
       <font-awesome-icon icon="fa-solid fa-check" />
     </button>
+
+    <div class="bg-red-500 p-3 mt-3 rounded-md" v-if="isCheckSuccessful === false">
+        <p class="text-white">Right Word: 
+            <span class="font-semibold">
+                {{ practiceVocabularySetStore.practiceVocabularyList[practiceVocabularySetStore.practiceVocabularyList.length - 1].foreignWord  }}
+            </span>
+        </p>
+    </div>
   </div>
 </template>
 
