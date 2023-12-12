@@ -24,6 +24,8 @@ const DEBUG = true
 
 if (DEBUG) {
     axios.defaults.baseURL = 'http://127.0.0.1:8000'
+} else {
+    axios.defaults.baseURL = 'https://apivm.sebastiankurrle-projects.de'
 }
 
 const app = createApp(App)

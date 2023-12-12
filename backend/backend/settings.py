@@ -14,14 +14,19 @@ SECRET_KEY = 'django-insecure-%swv-h6t+485m3jkk1uvj_f&gflt-#3%q%5qsf45u#78s=h@8g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1:8000'
+    'apivm.sebastiankurrle-projects.de'
+]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'https://vocab-master.sebastiankurrle-projects.de'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
+    'https://vocab-master.sebastiankurrle-projects.de'
 ]
 
 # Application definition
