@@ -22,7 +22,9 @@ const practiceVocabularyStore = usePracticeVocabularySetStore()
         </div>
 
         <div v-else>
-            <PracticeVocabularyInput />
+            <div v-if="practiceVocabularyStore.practiceVocabularyList.length > 0">
+                <PracticeVocabularyInput />
+            </div>
 
             <button class="bg-red-600 hover:bg-red-700 p-3 w-full rounded-md text-white"
                 @click="practiceVocabularyStore.endPractice">

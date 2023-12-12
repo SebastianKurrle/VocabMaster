@@ -12,9 +12,9 @@ watch(isCheckSuccessful, (newValue) => {
   if (newValue !== null) {
     setTimeout(() => {
       isCheckSuccessful.value = null;
-      practiceVocabularySetStore.nextWord()
-      solution.value = ''
-    }, 3000);
+    }, 2000);
+
+    solution.value = ''
   }
 });
 
@@ -27,13 +27,14 @@ const checkInput = () => {
 <template>
   <div class="mb-3" v-if="practiceVocabularySetStore.vocabularyListLoaded">
     <h6 class="font-semibold">Word</h6>
-    <p class="bg-gray-600 text-white rounded-md p-3">{{ practiceVocabularySetStore.practiceVocabularyList[practiceVocabularySetStore.currentVocabularyWordIndex].nativeWord }}</p>
+    <p class="text-base">Left over: {{ practiceVocabularySetStore.practiceVocabularyList.length }}</p>
+    <p class="bg-gray-600 text-white rounded-md p-3">{{ practiceVocabularySetStore.practiceVocabularyList[0].nativeWord }}</p>
 
     <h6 class="font-semibold mt-3">Your Solution</h6>
     <input type="text" class="w-full rounded-md" v-model="solution">
 
     <button
-      class="bg-gray-600 hover:bg-gray-700 p-3 w-full mt-3 text-white rounded-md"
+      class="bg-gray-600 p-3 w-full mt-3 text-white rounded-md"
       :class="{ 'bg-green-500': isCheckSuccessful === true, 'bg-red-500': isCheckSuccessful === false }"
       @click="checkInput"
     >

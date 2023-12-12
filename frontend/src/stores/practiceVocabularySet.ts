@@ -11,7 +11,6 @@ export const usePracticeVocabularySetStore = defineStore('practiceVocabulray', (
     // Vars
     const practiceIsRunning = ref<boolean>(false) // Indicates whether the user is currently practicing vocabulary
     const vocabularyListLoaded = ref(false)
-    const currentVocabularyWordIndex = ref(0)
 
     // Lists
     const practiceVocabularyList = reactive(Array<IVocabularyPractice>())
@@ -21,7 +20,6 @@ export const usePracticeVocabularySetStore = defineStore('practiceVocabulray', (
         await vocabularyStore.getAllVocabularyFromSet()
         practiceIsRunning.value = true
         vocabularyListLoaded.value = true
-        currentVocabularyWordIndex.value = 0
 
         fillPracticeVocabulrayList()
         shuffleVocabList()
@@ -33,16 +31,17 @@ export const usePracticeVocabularySetStore = defineStore('practiceVocabulray', (
     }
 
     const checkWordInput = (solution:string): boolean => {
-        const result = solution.toLowerCase() === practiceVocabularyList[currentVocabularyWordIndex.value].foreignWord.toLowerCase()
+        const result = solution.toLowerCase() === practiceVocabularyList[0].foreignWord.toLowerCase()
+
+        const vocab = practiceVocabularyList.splice(0, 1)[0]
+
+        if (!result) {
+            practiceVocabularyList.push(vocab)
+        }
 
         return result
     }
-
-    const nextWord = () => {
-        if (currentVocabularyWordIndex.value < practiceVocabularyList.length - 1) {
-            currentVocabularyWordIndex.value++
-        }
-    }
+    
 
     // Helper Functions
 
@@ -71,12 +70,9 @@ export const usePracticeVocabularySetStore = defineStore('practiceVocabulray', (
         practiceIsRunning,
         vocabularyListLoaded,
         practiceVocabularyList,
-        currentVocabularyWordIndex,
-
         // Functions
         startPractice,
         endPractice,
         checkWordInput,
-        nextWord
     }
 })
