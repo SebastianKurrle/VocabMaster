@@ -1,5 +1,6 @@
 from datetime import timedelta
 from pathlib import Path
+from .db import get_db_con
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,7 +16,7 @@ SECRET_KEY = 'django-insecure-%swv-h6t+485m3jkk1uvj_f&gflt-#3%q%5qsf45u#78s=h@8g
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1:8000'
+    '127.0.0.1',
     'apivm.sebastiankurrle-projects.de'
 ]
 
@@ -25,8 +26,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-    'https://vocab-master.sebastiankurrle-projects.de'
+    'http://127.0.0.1',
+    'https://apivm.sebastiankurrle-projects.de'
 ]
 
 # Application definition
@@ -102,10 +103,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': get_db_con(DEBUG, BASE_DIR)
 }
 
 
