@@ -19,6 +19,10 @@ const vocabularyForm = ref<IVocabulary>({
 const submitForm = async () => {
     vocabularyForm.value.vocabSet = String(vocabularySetStore.currentVocabularySet?.id)
 
+    // Not white space in before or after the vocabulary
+    vocabularyForm.value.nativeWord = vocabularyForm.value.nativeWord.trim()
+    vocabularyForm.value.foreignWord = vocabularyForm.value.foreignWord.trim()
+
     await vocabularyStore.createVocabulary(vocabularyForm.value)
     vocabularyStore.getAllVocabularyFromSet()
 

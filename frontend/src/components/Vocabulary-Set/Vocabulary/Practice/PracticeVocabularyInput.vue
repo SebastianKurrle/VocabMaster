@@ -19,7 +19,7 @@ watch(isCheckSuccessful, (newValue) => {
 });
 
 const checkInput = () => {
-  isCheckSuccessful.value = practiceVocabularySetStore.checkWordInput(solution.value);
+  isCheckSuccessful.value = practiceVocabularySetStore.checkWordInput(solution.value.trim());
 };
 
 </script>
