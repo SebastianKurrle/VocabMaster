@@ -49,7 +49,16 @@ def get_user(request):
 def update_user(request):
     user = request.user
     serializer = UserSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
+
+    if request.data['email'] == user.email:
+        user.name = request.data['name']
+        user.save()
+
+        return Response(status=200)
+
+    if not serializer.is_valid(raise_exception=True):
+        return Response(serializer.errors)
+
     serializer.update(user, serializer.validated_data)
 
     return Response(status=200)
@@ -63,6 +72,9 @@ def update_password(request):
 
     if old_password != '' and new_password != '' and not user.check_password(old_password):
         return Response({'Error': 'Invalid Password'}, status=400)
+
+    if old_password == new_password:
+        return Response({'Error': 'New password can not be the old password!'}, status=400)
 
     user.set_password(new_password)
     user.save()

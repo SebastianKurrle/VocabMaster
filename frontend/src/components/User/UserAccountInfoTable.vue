@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 
+// components
+import UserUpdateModal from './UserUpdateModal.vue';
+import UserUpdatePasswordModal from './UserUpdatePasswordModal.vue';
+
 // stores
 const userStore = useUserStore()
 </script>
@@ -17,7 +21,12 @@ const userStore = useUserStore()
                         {{ userStore.user.email }}
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><font-awesome-icon icon="fa-solid fa-pen-to-square" /></a>
+                        <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        data-te-toggle="modal"
+                        data-te-target="#updateEmail" data-te-ripple-init data-te-ripple-color="dark"
+                        >
+                            <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+                        </button>
                     </td>
                 </tr>
                 <tr class="border-b bg-gray-800 border-gray-70">
@@ -39,11 +48,21 @@ const userStore = useUserStore()
                         <font-awesome-icon icon="fa-solid fa-lock" />
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><font-awesome-icon icon="fa-solid fa-pen-to-square" /></a>
+                        <button 
+                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        data-te-toggle="modal"
+                        data-te-target="#updatePassword" data-te-ripple-init data-te-ripple-color="dark"
+                        >
+                            <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <!-- Modals -->
+        <UserUpdateModal />
+        <UserUpdatePasswordModal />
     </div>
 </template>
 

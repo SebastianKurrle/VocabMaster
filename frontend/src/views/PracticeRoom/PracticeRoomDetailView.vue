@@ -2,12 +2,16 @@
 import { usePracticeRoomStore } from '@/stores/practiceRoom';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+
 // components
 import LanguagePracticeRoomDetailInfo from '@/components/Practice-Room/LanguagePracticeRoomDetailInfo.vue';
 import VocabularySetList from '@/components/Vocabulary-Set/VocabularySetList.vue';
 
+
 // stores
 const practiceRoomStore = usePracticeRoomStore()
+const userStore = useUserStore()
 
 const route = useRoute()
 
@@ -16,6 +20,8 @@ const room = ref()
 const loaded = ref(false)
 
 onMounted(async () => {
+    userStore.loginRequired()
+
     room.value = await practiceRoomStore.getPracticeRoomById(String(route.params.id))
     if (room.value.name) {
         loaded.value = true

@@ -6,11 +6,15 @@ import type { IUserSignIn } from '@/assets/Interfaces/IUserSignIn'
 import { toast } from 'vue3-toastify'
 import axios from 'axios'
 import router from '@/router'
+import type { IUserUpdate } from '@/assets/Interfaces/IUserUpdate'
+import type { IPasswordUpdate } from '@/assets/Interfaces/IPasswordUpdate'
 
 export const useUserStore = defineStore('user', () => {
   const authenticated = ref(false)
   const signUpErrors = reactive(Array())
   const signInErrors = reactive(Array())
+  const userUpdateErrors = reactive(Array())
+  const passwordUpdateErrors = reactive(Array())
 
   const user = ref<IUser>({
     id: '',
@@ -62,51 +66,51 @@ export const useUserStore = defineStore('user', () => {
     Sends a signup request to the api to create a new user
     If the server throws an error the error will be pushed in to the signUpErrors list
   */
-  const userSignUp = async (signUpUser:IUserSignUp) => {
+  const userSignUp = async (signUpUser: IUserSignUp) => {
     signUpErrors.length = 0
 
     await axios
-          .post('/api/user/signup/', signUpUser)
-          .then(response => {
-              router.push({name: 'sign-in'})
-              toast.success('User Created', { autoClose: 3000 })
-          })
-          .catch(error => {
-            if (error.response) {
-              // Loops the server errors and push it in the errors array
-              for (const property in error.response.data.status) {
-                signUpErrors.push(
-                      `${property}: ${error.response.data.status[property]}`
-                  );
-              }
-            }
-          })
+      .post('/api/user/signup/', signUpUser)
+      .then(response => {
+        router.push({ name: 'sign-in' })
+        toast.success('User Created', { autoClose: 3000 })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Loops the server errors and push it in the errors array
+          for (const property in error.response.data.status) {
+            signUpErrors.push(
+              `${property}: ${error.response.data.status[property]}`
+            );
+          }
+        }
+      })
   }
 
   /*
     Sends a signin request to the api to sign in with an existing user
     If the server throws an error the error will be pushed in to the signInErrors list
   */
-  const userSignIn = async (logInUser:IUserSignIn) => {
+  const userSignIn = async (logInUser: IUserSignIn) => {
     signInErrors.length = 0
 
     await axios
-            .post('/api/user/login/', logInUser)
-            .then(response => {
-              user.value.token = response.data.access
-              checkToken(user.value.token)
-              router.push({'name': 'home'})
-            })
-            .catch(error => {
-              if (error.response) {
-                // Loops the server errors and push it in the errors array
-                for (const property in error.response.data) {
-                    signInErrors.push(
-                        `${property}: ${error.response.data[property]}`
-                    );
-                }
-              }
-            })
+      .post('/api/user/login/', logInUser)
+      .then(response => {
+        user.value.token = response.data.access
+        checkToken(user.value.token)
+        router.push({ 'name': 'home' })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Loops the server errors and push it in the errors array
+          for (const property in error.response.data) {
+            signInErrors.push(
+              `${property}: ${error.response.data[property]}`
+            );
+          }
+        }
+      })
   }
 
   /*
@@ -129,14 +133,61 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /*
+    Updates the user with an API CALL
+  */
+  const userUpdate = async (updatedUser: IUserUpdate) => {
+    userUpdateErrors.length = 0
+
+    await axios
+      .put('/api/user/update/', updatedUser)
+      .then(response => {
+        checkToken(user.value.token)
+        toast.success('Updated!', { autoClose: 3000 })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Loops the server errors and push it in the errors array
+          for (const property in error.response.data) {
+            userUpdateErrors.push(
+              `${property}: ${error.response.data[property]}`
+            );
+          }
+        }
+      })
+  }
+
+   /*
+    Updates the users password with an API CALL
+  */
+  const passwordUpdate = (updatedPassword:IPasswordUpdate) => {
+    passwordUpdateErrors.length = 0
+
+    axios
+      .put('/api/user/update/password/', updatedPassword)
+      .then(response => {
+        toast.success('Password changed', { autoClose: 3000 })
+      })
+      .catch(error => {
+        if (error.response) {
+          // Loops the server errors and push it in the errors array
+          for (const property in error.response.data) {
+            passwordUpdateErrors.push(
+              `${property}: ${error.response.data[property]}`
+            );
+          }
+        }
+      })
+  }
+
+  /*
     This function is for views where the user needs to be logged in
     otherwise he get pushed to the login page
   */
-  const loginRequired = async ():Promise<boolean> => {
+  const loginRequired = async (): Promise<boolean> => {
     await checkToken(String(localStorage.getItem('token')))
 
     if (!authenticated.value) {
-      router.push({name: 'sign-in'})
+      router.push({ name: 'sign-in' })
       return false
     }
 
@@ -144,14 +195,21 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
+    // Functions
     checkToken,
     userSignUp,
     userSignIn,
     userLogout,
+    userUpdate,
+    passwordUpdate,
     loginRequired,
+
+    // Vars
     user,
     authenticated,
     signUpErrors,
-    signInErrors
+    signInErrors,
+    userUpdateErrors,
+    passwordUpdateErrors
   }
 })
